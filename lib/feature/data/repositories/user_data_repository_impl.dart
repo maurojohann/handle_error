@@ -6,25 +6,12 @@ import 'package:erros_handle/feature/domain/entities/user_entity.dart';
 import 'package:erros_handle/feature/domain/repositories/user_data_repository.dart';
 
 import '../../domain/errors/user_data_failure.dart';
+import '../datasources/user_data_sources_impl.dart';
 
 class UserDataRepositoryImpl implements UserDataRepository {
-  UserDataSources fetchRemoteUserData = UserDataSources();
+  UserDataSourcesimpl fetchRemoteUserData = UserDataSourcesimpl();
   @override
   Future<UserEntity> fetchUserData() async {
     return fetchRemoteUserData.fecthUserData();
-  }
-}
-
-class UserDataSources {
-  final Dio dio = Dio();
-  FutureOr<UserDataModels> fecthUserData() async {
-    return await dio.get('https://jsonplaceholder.typicode.com/todo/1').then((response) {
-      return UserDataModels.fromJson(response.data);
-    }).onError<DioError>((e, s) {
-      throw FetchUserDataFailure(
-        label: 'UserDataSources.fecthUserData()',
-        errorMessage: e,
-      );
-    });
   }
 }
